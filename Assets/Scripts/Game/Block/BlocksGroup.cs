@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -110,8 +111,8 @@ namespace Game.Block
             
             for (int i = 0 ;i < blocksNumber  ;i ++)
             {
-                int toColumn = Random.Range(-1,1); //-1 = back , 0 = don`t move , 1 = move to forward
-                int toRow = Random.Range(-1,1);  //-1 = back , 0 = don`t move , 1 = move to forward
+                int toColumn = Random.Range(-1,2); //-1 = back , 0 = don`t move , 1 = move to forward
+                int toRow = Random.Range(-1,2);  //-1 = back , 0 = don`t move , 1 = move to forward
                 
                 BlockIdentity block = FindBlocksByLocation(lastBlock.column + toColumn, lastBlock.row + toRow);
 
@@ -145,6 +146,11 @@ namespace Game.Block
             }
             
             return null;
+        }
+
+        private bool IsBlockInList(BlockIdentity block)
+        {
+            return _listBlocks.Any(b => b.column == block.column && b.row == block.row);
         }
 
         #endregion

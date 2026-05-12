@@ -15,7 +15,9 @@ namespace Game
         [Header("Settings")] [SerializeField] private string matchBlockUseTag;
         
         [Tooltip("Events")]
-        public event Action<bool> OnMatch;
+        public event Action OnTriggered;
+        public event Action OnMatch;
+        public event Action OnUnMatch;
 
         private BlocksGroup _groupTriggered;
         
@@ -30,13 +32,14 @@ namespace Game
 
             if (IsMatch(_groupTriggered))
             {
-                OnMatch?.Invoke(true);
+                OnMatch?.Invoke();
             }
             else
             {
-                OnMatch?.Invoke(false);
+                OnUnMatch?.Invoke();
             }
 
+            OnTriggered?.Invoke();
             Reset();
         }
         
@@ -90,7 +93,7 @@ namespace Game
 
         private void Reset()
         {
-            _groupTriggered.HidAll().Forget();
+            _groupTriggered.HideAll().Forget();
         }
         
     }

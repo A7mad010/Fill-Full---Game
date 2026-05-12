@@ -12,14 +12,14 @@ namespace Game.Block
         private void Start()
         {
             if(matchManager == null) return;
-            matchManager.OnMatch += OnUpdateMatch;
+            matchManager.OnTriggered += ResetButtons;
 
             HideButtons();
         }
 
-        private void OnUpdateMatch(bool isMatch)
+        public void ShowButton()
         {
-            ResetButtons();
+            TaskShowButtons().Forget();
         }
     
         private void ResetButtons()
@@ -30,7 +30,7 @@ namespace Game.Block
             }
         }
 
-        public async UniTask ShowButtons()
+        private async UniTask TaskShowButtons()
         {
             foreach (BlockButton button in buttons)
             {

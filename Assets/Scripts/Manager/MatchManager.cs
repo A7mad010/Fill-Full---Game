@@ -1,18 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Attributes;
 using Cysharp.Threading.Tasks;
 using Game.Block;
 using UnityEngine;
 
 namespace Game
 {
+    /// <summary>
+    /// This Class used to read the match between two walls
+    /// </summary>
     public class MatchManager : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private BlocksGroup blocksGroup;
-
-        [Header("Settings")] [SerializeField] private string matchBlockUseTag;
+        
+        [Header("Settings")] 
+        [SerializeField ,Tag] private string matchBlockUseTag;
         
         [Tooltip("Events")]
         public event Action OnTriggered;
@@ -21,7 +26,22 @@ namespace Game
 
         private BlocksGroup _groupTriggered;
         
-        private async UniTask Distance()
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag(matchBlockUseTag))
+            {
+                _groupTriggered = other.gameObject.GetComponent<BlocksGroup>();
+                Debug.Log("triggered");
+                
+                Match().Forget();
+            }
+            else
+            {
+                Debug.Log($"tag {other.tag} isn't found");
+            }
+        }
+
+        private async UniTask Match()
         {
             if (!_groupTriggered)
             {
@@ -40,24 +60,9 @@ namespace Game
             }
 
             OnTriggered?.Invoke();
-            Reset();
+            ResetTargetWll();
         }
         
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag(matchBlockUseTag))
-            {
-                _groupTriggered = other.gameObject.GetComponent<BlocksGroup>();
-                Debug.Log("triggered");
-                
-                Distance().Forget();
-            }
-            else
-            {
-                Debug.Log($"tag {other.tag} isn't found");
-            }
-        }
-
         private bool IsMatch(BlocksGroup matchWith)
         {
             List<BlockIdentity> targetBlocks = matchWith.GetBlocks();
@@ -91,10 +96,9 @@ namespace Game
             return true;
         }
 
-        private void Reset()
+        private void ResetTargetWll()
         {
-            _groupTriggered.HideAll().Forget();
+            _groupTriggered.HidAll().Forget();
         }
-        
     }
 }

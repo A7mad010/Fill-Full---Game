@@ -60,7 +60,7 @@ namespace Game.Block
         {
             foreach (BlockIdentity block in blocks)
             {
-                block.GetComponent<BlockTransform>().Hide(0.2f);
+                block.GetComponent<TranstionEffects>().ScaleOut(0.2f);
                 
                 await UniTask.Yield();
             }
@@ -70,7 +70,7 @@ namespace Game.Block
         {
             foreach (BlockIdentity block in _listBlocks)
             {
-                block.GetComponent<BlockTransform>().Hide(0.2f);
+                block.GetComponent<TranstionEffects>().ScaleOut(0.2f);
                 
                 await UniTask.Yield();
             }
@@ -80,7 +80,7 @@ namespace Game.Block
         {
             foreach (BlockIdentity block in blocks)
             {
-                block.GetComponent<BlockTransform>().Show(0);
+                block.GetComponent<TranstionEffects>().ScaleIn(0);
                 
                 await UniTask.Yield();
             }

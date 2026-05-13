@@ -20,18 +20,18 @@ namespace Game.Block
 
         private bool _isAdded = false;
         private Vector3 _startScale;
-        private BlockTransform _blockTransform;
+        private TranstionEffects _transtionEffects;
 
         private void Start()
         {
-            _blockTransform = blockIdentity.GetComponent<BlockTransform>();
+            _transtionEffects = blockIdentity.GetComponent<TranstionEffects>();
             
             Initialize();
         }
 
         public void ToggleBlock()
         {
-            if (!blocksGroup || !_blockTransform || !blockIdentity) return;
+            if (!blocksGroup || !_transtionEffects || !blockIdentity) return;
             
             if (_isAdded)
             {
@@ -48,7 +48,7 @@ namespace Game.Block
         public void Click()
         {
             blocksGroup.AddBlock(blockIdentity);
-            _blockTransform.Show(0.2f);
+            _transtionEffects.ScaleIn(0.2f);
             
             imageButton.color = pressedColor;
             _isAdded = true;
@@ -57,7 +57,7 @@ namespace Game.Block
         public void UnClick()
         {
             blocksGroup.RemoveBlock(blockIdentity);
-            _blockTransform.Hide(0.2f);
+            _transtionEffects.ScaleOut(0.2f);
             
             imageButton.color = unpressedColor;
             _isAdded = false;

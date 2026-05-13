@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Block
 {
-    public class BlockTransform : MonoBehaviour
+    public class TranstionEffects : MonoBehaviour
     {
         private Vector3 _startPosition;
 
@@ -13,14 +13,14 @@ namespace Game.Block
             SavePoints();
         }
 
-        public void Show(float duration)
+        public void ScaleIn(float duration)
         {
-            ScaleSize(_startPosition, duration).Forget();
+            ToggleScaleSize(_startPosition, duration).Forget();
         }
 
-        public void Hide(float duration)
+        public void ScaleOut(float duration)
         {
-            ScaleSize(Vector3.zero, duration).Forget();
+            ToggleScaleSize(Vector3.zero, duration).Forget();
         }
 
         private void SavePoints()
@@ -28,7 +28,7 @@ namespace Game.Block
             _startPosition = transform.localScale;
         }
         
-        private async UniTaskVoid ScaleSize(Vector3 targetScale, float duration)
+        private async UniTaskVoid ToggleScaleSize(Vector3 targetScale, float duration)
         {
             float value = 0;
             float timer = 0;

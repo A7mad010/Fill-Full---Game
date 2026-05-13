@@ -5,12 +5,15 @@ using UnityEngine.Events;
 
 namespace Effects
 {
+    /// <summary>
+    /// Use this class to looping movement
+    /// </summary>
     public class MovePip : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Transform pipTransform;
+        [SerializeField] private Transform target;
 
-        [Header("Settings")]
+        [Header("Settings")] 
         [SerializeField] private float duration = 1f;
         [SerializeField] private Vector3 offset;
 
@@ -27,17 +30,23 @@ namespace Effects
             Play();
         }
 
-        public void Play()
+        private void Play()
         {
             Stop();
             Loop().Forget();
         }
 
-        public void Stop()
+        private void Stop()
         {
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
+        }
+
+        private void SavePoints()
+        {
+            _startPosition = target.position;
+            _endPosition = _startPosition + offset;
         }
         
         private async UniTaskVoid Loop()
@@ -46,25 +55,19 @@ namespace Effects
 
             while (!_cts.Token.IsCancellationRequested)
             {
+                //Go
                 await Move(_endPosition, _cts.Token);
-                onArrive?.Invoke();
 
+                //Back
                 await Move(_startPosition, _cts.Token);
-                onArrive?.Invoke();
             }
-        }
-
-        private void SavePoints()
-        {
-            _startPosition = pipTransform.position;
-            _endPosition = _startPosition + offset;
         }
 
         private async UniTask Move(Vector3 targetPosition, CancellationToken token)
         {
             float value = 0f;
             float timer = 0f;
-            Vector3 startPos = pipTransform.position;
+            Vector3 startPos = target.position;
 
             while (timer < duration)
             {
@@ -72,12 +75,12 @@ namespace Effects
 
                 timer += Time.deltaTime;
                 value = timer / duration;
-                pipTransform.position = Vector3.Lerp(startPos, targetPosition, value);
+                target.position = Vector3.Lerp(startPos, targetPosition, value);
 
                 await UniTask.Yield(token);
             }
 
-            pipTransform.position = targetPosition;
+            target.position = targetPosition;
         }
 
         private void OnDestroy()

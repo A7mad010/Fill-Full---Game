@@ -5,6 +5,9 @@ using SmoothShakeFree;
 
 namespace Effects
 {
+    /// <summary>
+    /// Use this class to shake the camera
+    /// </summary>
     public class CameraShake : MonoBehaviour
     {
         [Header("References")] 

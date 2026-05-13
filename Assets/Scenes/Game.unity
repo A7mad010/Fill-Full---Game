@@ -372,7 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 120846982}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: -252.8, z: 0}
   onArrive:
@@ -572,7 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 215468954}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: -107.42, z: 0}
   onArrive:
@@ -1031,12 +1031,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Wall.WallsGroup
   spawnPoint: {fileID: 1870962445}
+  matchManager: {fileID: 1077729191}
   groups:
   - {fileID: 1295385233}
   - {fileID: 837783836}
   - {fileID: 1826285819}
   - {fileID: 80401172}
-  durationBetweenWalls: 10.13
+  startOnAwake: 1
 --- !u!114 &272010973 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8193086000110629682, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
@@ -2558,7 +2559,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 906147837670213006, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
-      insertIndex: -1
+      insertIndex: 3
       addedObject: {fileID: 1077729191}
     - targetCorrespondingSourceObject: {fileID: 906147837670213006, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
       insertIndex: -1
@@ -3562,7 +3563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 877351485}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: 200, z: 0}
   onArrive:
@@ -3694,7 +3695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 1023452292}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: -263.76, z: 0}
   onArrive:
@@ -4047,7 +4048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 1166438749}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: 200, z: 0}
   onArrive:
@@ -4237,7 +4238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 1308068193}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: 207.2, z: 0}
   onArrive:
@@ -5169,7 +5170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee792b379094cfa4490f2f910e005d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effects.MovePip
-  pipTransform: {fileID: 1545268917}
+  target: {fileID: 0}
   duration: 10.87
   offset: {x: 0, y: -322.1, z: 0}
   onArrive:

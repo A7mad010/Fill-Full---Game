@@ -1037,7 +1037,7 @@ MonoBehaviour:
   - {fileID: 837783836}
   - {fileID: 1826285819}
   - {fileID: 80401172}
-  isStartOnAwake: 1
+  startOnAwake: 1
 --- !u!114 &272010973 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8193086000110629682, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
@@ -2433,14 +2433,6 @@ PrefabInstance:
     - target: {fileID: 3634557139626892656, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3949203209425925937, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
-      propertyPath: rows
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3949203209425925937, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
-      propertyPath: columns
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4518775475189964813, guid: 6b40dd53caacf97438d7b35fe69f7119, type: 3}
       propertyPath: m_IsActive

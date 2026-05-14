@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Block;
 using Core.Attributes;
 using Cysharp.Threading.Tasks;
 using Game.Block;
@@ -65,8 +66,8 @@ namespace Game
         
         private bool IsMatch(BlocksGroup matchWith)
         {
-            List<BlockIdentity> targetBlocks = matchWith.GetBlocks();
-            List<BlockIdentity> myBlocks = blocksGroup.GetBlocks();
+            List<BlockIdentity> targetBlocks = matchWith.GetBlocksList();
+            List<BlockIdentity> myBlocks = blocksGroup.GetBlocksList();
             
             if(targetBlocks.Count != myBlocks.Count)
             {

@@ -1,11 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.Attributes;
 using Cysharp.Threading.Tasks;
+using Effects;
+using Game.Block;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Game.Block
+namespace Block
 {
+    /// <summary>
+    /// Use this class to manage blocks
+    /// </summary>
     public class BlocksGroup : MonoBehaviour
     {
         [Header("References")] 
@@ -18,41 +24,44 @@ namespace Game.Block
         [SerializeField] private int minBlocks;
         [SerializeField] private int maxBlocks;
         
-        private BlockIdentity _mainBlock;
-        public List<BlockIdentity> _listBlocks;
-
+        [Header("Debug")]
+        [SerializeField , ReadOnly] private List<BlockIdentity> listBlocks;
+        
+        private BlockIdentity _mainBlock; 
+        
         private void Start()
         {
-            _listBlocks = new List<BlockIdentity>();
+            listBlocks = new List<BlockIdentity>();
         }
         
-        public async UniTask StartGame()
+        public async UniTask GenerateRandomBranch()
         {
-            _listBlocks?.Clear();
+            listBlocks?.Clear();
 
             await ShowAllInList();
             await CreateNewBranch();
             await HideAllInList();
         }
 
+        #region Add and Remove from a list
+
         public void AddBlock(BlockIdentity block)
         {
-            if(_listBlocks.Contains(block)) return;
+            if(listBlocks.Contains(block)) return;
             
-            _listBlocks.Add(block);
+            Debug.Log($"add , {block.name}");
+            listBlocks.Add(block);
         }
         
         public void RemoveBlock(BlockIdentity block)
         {
-            if (!_listBlocks.Contains(block)) return;
+            if (!listBlocks.Contains(block)) return;
             
-            _listBlocks.Remove(block);
+            Debug.Log($"Removing , {block.name}");
+            listBlocks.Remove(block);
         }
-        
-        public List<BlockIdentity> GetBlocks()
-        {
-            return _listBlocks;
-        }
+
+        #endregion
         
         #region Show And Hide Blocks
 
@@ -60,7 +69,7 @@ namespace Game.Block
         {
             foreach (BlockIdentity block in blocks)
             {
-                block.GetComponent<TranstionEffects>().ScaleOut(0.2f);
+                block.GetComponent<ScaleEffect>().ScaleOut(0.2f);
                 
                 await UniTask.Yield();
             }
@@ -68,19 +77,25 @@ namespace Game.Block
         
         private async UniTask HideAllInList()
         {
-            foreach (BlockIdentity block in _listBlocks)
+            Debug.Log($"Hides all 1 : {listBlocks.Count} blocks!");
+            
+            foreach (BlockIdentity block in listBlocks)
             {
-                block.GetComponent<TranstionEffects>().ScaleOut(0.2f);
+                if(!listBlocks.Contains(block)) continue;
+                
+                block.GetComponent<ScaleEffect>().ScaleOut(0.2f);
                 
                 await UniTask.Yield();
             }
+            
+            Debug.Log($"Hides all 2 : {listBlocks.Count} blocks!");
         }
 
         private async UniTask ShowAllInList()
         {
             foreach (BlockIdentity block in blocks)
             {
-                block.GetComponent<TranstionEffects>().ScaleIn(0);
+                block.GetComponent<ScaleEffect>().ScaleIn(0.2f);
                 
                 await UniTask.Yield();
             }
@@ -95,47 +110,61 @@ namespace Game.Block
             int column = Random.Range(0,columns);
             int row = Random.Range(0,rows);
             
-            return FindBlocksByLocation(column, row);
+            return GetBlocksByLocation(column, row);
         }
         
         private async UniTask CreateNewBranch()
         {
-            int blocksNumber = Random.Range(minBlocks,maxBlocks);
+            int blocksNumber = Random.Range(minBlocks, maxBlocks + 1);
             BlockIdentity lastBlock = NewMainBlockRandom();
-            
+
             if (lastBlock == null)
             {
                 Debug.LogError("No valid starting block found!");
                 return;
             }
-            
-            for (int i = 0 ;i < blocksNumber  ;i ++)
-            {
-                int toColumn = Random.Range(-1,2); //-1 = back , 0 = don`t move , 1 = move to forward
-                int toRow = Random.Range(-1,2);  //-1 = back , 0 = don`t move , 1 = move to forward
-                
-                BlockIdentity block = FindBlocksByLocation(lastBlock.column + toColumn, lastBlock.row + toRow);
 
-                if (block == null)
+            AddBlock(lastBlock); // add starting block
+
+            for (int i = 0; i < blocksNumber; i++)
+            {
+                int toColumn = Random.Range(-1, 2);
+                int toRow = Random.Range(-1, 2);
+
+                int newColumn = lastBlock.column + toColumn;
+                int newRow = lastBlock.row + toRow;
+
+                // prevent out of bounds
+                if (newColumn < 0 || newColumn >= columns || newRow < 0 || newRow >= rows)
                 {
-                    block = NewMainBlockRandom();
+                    await UniTask.Yield();
+                    continue;
                 }
-                
-                if (block != null)
+
+                BlockIdentity block = GetBlocksByLocation(newColumn, newRow);
+
+                if (block != null && !IsBlockInList(block))
                 {
-                    lastBlock = block;
                     AddBlock(block);
+                    lastBlock = block;
                 }
-                
+
                 await UniTask.Yield();
             }
+            
+            Debug.Log($"Created new branch! {listBlocks.Count} blocks created!");
         }
         
         #endregion
 
         #region Get
         
-        private BlockIdentity FindBlocksByLocation(int column, int row)
+        public List<BlockIdentity> GetBlocksList()
+        {
+            return listBlocks;
+        }
+        
+        private BlockIdentity GetBlocksByLocation(int column, int row)
         {
             foreach (BlockIdentity block in blocks)
             {
@@ -150,10 +179,9 @@ namespace Game.Block
 
         private bool IsBlockInList(BlockIdentity block)
         {
-            return _listBlocks.Any(b => b.column == block.column && b.row == block.row);
+            return listBlocks.Any(b => b.column == block.column && b.row == block.row);
         }
 
         #endregion
-        
     }
 }

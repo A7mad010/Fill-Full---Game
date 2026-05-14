@@ -1,9 +1,11 @@
-using System;
+using Block;
 using Cysharp.Threading.Tasks;
+using Effects;
+using Game.Block;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Block
+namespace UI.Block_Buttons
 {
     public class BlockButton : MonoBehaviour
     {
@@ -13,25 +15,35 @@ namespace Game.Block
         [SerializeField] private RectTransform blockTransform;
         [SerializeField] private Image imageButton;
         
-        
         [Header("Settings")]
         [SerializeField] private Color pressedColor;
         [SerializeField] private Color unpressedColor;
 
         private bool _isAdded = false;
         private Vector3 _startScale;
-        private TranstionEffects _transtionEffects;
+        private ScaleEffect _scaleEffect;
+
+        #region Initilaze
 
         private void Start()
         {
-            _transtionEffects = blockIdentity.GetComponent<TranstionEffects>();
+            _scaleEffect = blockIdentity.GetComponent<ScaleEffect>();
             
             Initialize();
         }
 
+        private void Initialize()
+        {
+            UnClick();
+        }
+
+        #endregion
+        
+        #region Click Button
+
         public void ToggleBlock()
         {
-            if (!blocksGroup || !_transtionEffects || !blockIdentity) return;
+            if (!blocksGroup || !_scaleEffect || !blockIdentity) return;
             
             if (_isAdded)
             {
@@ -41,14 +53,13 @@ namespace Game.Block
             else
             {
                 Click();
-
             }
         }
 
         public void Click()
         {
             blocksGroup.AddBlock(blockIdentity);
-            _transtionEffects.ScaleIn(0.2f);
+            _scaleEffect.ScaleIn(0.2f);
             
             imageButton.color = pressedColor;
             _isAdded = true;
@@ -57,11 +68,15 @@ namespace Game.Block
         public void UnClick()
         {
             blocksGroup.RemoveBlock(blockIdentity);
-            _transtionEffects.ScaleOut(0.2f);
+            _scaleEffect.ScaleOut(0.2f);
             
             imageButton.color = unpressedColor;
             _isAdded = false;
         }
+
+        #endregion
+
+        #region Hide And Show Button
 
         public void HideButton(float duration)
         {
@@ -72,7 +87,7 @@ namespace Game.Block
         {
             ToggleScale(Vector3.one, duration).Forget();
         }
-
+        
         private async UniTask ToggleScale(Vector3 targetScale, float duration)
         {
             float value = 0;
@@ -93,11 +108,9 @@ namespace Game.Block
             
             blockTransform.localScale = endScale;
         }
+
+        #endregion
         
-        private void Initialize()
-        {
-            UnClick();
-        }
         
     }
 }

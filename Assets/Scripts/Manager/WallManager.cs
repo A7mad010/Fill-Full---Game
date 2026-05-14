@@ -1,9 +1,9 @@
-using System;
+using Block;
 using Cysharp.Threading.Tasks;
-using Game.Block;
+using Game;
 using UnityEngine;
 
-namespace Game.Wall
+namespace Manager
 {
     /// <summary>
     /// Use this class to manage walls spawn
@@ -16,7 +16,7 @@ namespace Game.Wall
         [SerializeField] private BlocksGroup[] groups;
 
         [Header("Settings")]
-        [SerializeField] private bool startOnAwake;
+        [SerializeField] private bool isStartOnAwake;
 
         private int _wallIndex = 0;
         
@@ -27,24 +27,34 @@ namespace Game.Wall
                 matchManager.OnTriggered += StartWall;
             }
             
-            if(startOnAwake)
+            if(isStartOnAwake)
             {
                 StartWall();
             }
         }
-
+        
+        /// <summary>
+        /// Called this function when previous wall is finished
+        /// </summary>
         private void StartWall()
         {
             NextIndex();
             InitializeGroups(groups[_wallIndex]);
         }
         
+        /// <summary>
+        /// Initialize the wall
+        /// </summary>
+        /// <param name="group"></param>
         private void InitializeGroups(BlocksGroup group)
         {
-            group.transform.position = spawnPoint.position;
-            group.StartGame().Forget();
+            group.transform.position = spawnPoint.position; //Wall position
+            group.GenerateRandomBranch().Forget(); //Reset blocks and create new branchs
         }
 
+        /// <summary>
+        /// Next Wall
+        /// </summary>
         private void NextIndex()
         {
             if (_wallIndex >= groups.Length - 1)
